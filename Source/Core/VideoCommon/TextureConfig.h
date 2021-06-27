@@ -24,6 +24,7 @@ enum class AbstractTextureFormat : u32
   R32F,
   D32F,
   D32F_S8,
+  HDR,
   Undefined
 };
 

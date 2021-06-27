@@ -179,8 +179,8 @@ bool SwapChain::SelectSurfaceFormat()
     // Use a linear format instead, if this is the case.
     VkFormat format = VKTexture::GetLinearFormat(surface_format.format);
 
-    if (format == VK_FORMAT_R16G16B16A16_SFLOAT)
-      m_texture_format = AbstractTextureFormat::R16;
+    if (format == VK_FORMAT_A2B10G10R10_UNORM_PACK32)
+      m_texture_format = AbstractTextureFormat::HDR;
     /*
     else if (format == VK_FORMAT_R8G8B8A8_UNORM)
       m_texture_format = AbstractTextureFormat::RGBA8;
