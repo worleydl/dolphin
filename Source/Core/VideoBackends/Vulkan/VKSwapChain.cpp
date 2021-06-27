@@ -160,8 +160,8 @@ bool SwapChain::SelectSurfaceFormat()
   // If there is a single undefined surface format, the device doesn't care, so we'll just use RGBA
   if (surface_formats[0].format == VK_FORMAT_UNDEFINED)
   {
-    m_surface_format.format = VK_FORMAT_R16G16B16A16_SFLOAT;
-    m_surface_format.colorSpace = VK_COLOR_SPACE_BT2020_LINEAR_EXT;
+    m_surface_format.format = VK_FORMAT_R8G8B8A8_UNORM;
+    m_surface_format.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
     return true;
   }
 
