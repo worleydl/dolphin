@@ -154,13 +154,21 @@ bool SwapChain::SelectSurfaceFormat()
   res = vkGetPhysicalDeviceSurfaceFormatsKHR(g_vulkan_context->GetPhysicalDevice(), m_surface,
                                              &format_count, surface_formats.data());
   ASSERT(res == VK_SUCCESS);
+  
+  
 
   // If there is a single undefined surface format, the device doesn't care, so we'll just use RGBA
   if (surface_formats[0].format == VK_FORMAT_UNDEFINED)
   {
-    m_surface_format.format = VK_FORMAT_R8G8B8A8_UNORM;
-    m_surface_format.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+    m_surface_format.format = VK_FORMAT_R16G16B16A16_SFLOAT;
+    m_surface_format.colorSpace = VK_COLOR_SPACE_BT2020_LINEAR_EXT;
     return true;
+  }
+
+  for (const VkSurfaceFormatKHR& surface_format : surface_formats)
+  {
+    VkFormat format = VKTexture::GetLinearFormat(surface_format.format);
+    ERROR_LOG_FMT(VIDEO, "Video formats: {}", format);
   }
 
   // Try to find a suitable format.
@@ -170,10 +178,15 @@ bool SwapChain::SelectSurfaceFormat()
     // This results in gamma correction when presenting to the screen, which we don't want.
     // Use a linear format instead, if this is the case.
     VkFormat format = VKTexture::GetLinearFormat(surface_format.format);
-    if (format == VK_FORMAT_R8G8B8A8_UNORM)
+
+    if (format == VK_FORMAT_R16G16B16A16_SFLOAT)
+      m_texture_format = AbstractTextureFormat::R16;
+    /*
+    else if (format == VK_FORMAT_R8G8B8A8_UNORM)
       m_texture_format = AbstractTextureFormat::RGBA8;
     else if (format == VK_FORMAT_B8G8R8A8_UNORM)
       m_texture_format = AbstractTextureFormat::BGRA8;
+    */
     else
       continue;
 
