@@ -17,6 +17,11 @@
 
 #ifdef _WIN32
 #include <windows.h>
+
+#ifdef WINRT_XBOX
+#include "VideoBackends/D3DCommon/D3DCommon.h"
+#include "VideoCommon/ShaderCache.h"
+#endif
 #endif
 
 #include "AudioCommon/AudioCommon.h"
@@ -576,17 +581,26 @@ static void EmuThread(Core::System& system, std::unique_ptr<BootParameters> boot
 
   VideoBackendBase::PopulateBackendInfo(wsi);
 
-  if (!g_video_backend->Initialize(wsi))
+  if (g_video_backend->Initialized()) 
   {
-    PanicAlertFmt("Failed to initialize video backend!");
-    return;
-  }
-  Common::ScopeGuard video_guard{[] {
-    // Clear on screen messages that haven't expired
-    OSD::ClearMessages();
+      if (!g_video_backend->Initialize(wsi))
+      {
+        PanicAlertFmt("Failed to initialize video backend!");
+        return;
+      }
+      Common::ScopeGuard video_guard{[] {
+        // Clear on screen messages that haven't expired
+        OSD::ClearMessages();
 
-    g_video_backend->Shutdown();
-  }};
+        g_video_backend->Shutdown();
+      }};
+  }
+  else 
+  {
+      // Reload the libraries, as they get unloaded in the previous steps
+      D3DCommon::LoadLibraries();
+      g_shader_cache->InitializeShaderCache();
+  }
 
   if (cpu_info.HTT)
     Config::SetBaseOrCurrent(Config::MAIN_DSP_THREAD, cpu_info.num_cores > 4);
