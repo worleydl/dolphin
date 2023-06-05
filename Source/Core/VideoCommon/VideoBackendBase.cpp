@@ -238,7 +238,13 @@ const std::vector<std::unique_ptr<VideoBackendBase>>& VideoBackendBase::GetAvail
 #endif
 #ifdef _WIN32
     backends.push_back(std::make_unique<DX11::VideoBackend>());
+
+#ifdef WINRT_XBOX
+    // Emplace the Vulkan backend at the beginning so it takes precedence over OpenGL.
+    backends.emplace(backends.begin(), std::make_unique<DX12::VideoBackend>());
+#else
     backends.push_back(std::make_unique<DX12::VideoBackend>());
+#endif
 #endif
 #ifdef HAS_VULKAN
 #ifdef __APPLE__
@@ -390,7 +396,9 @@ bool VideoBackendBase::InitializeShared(std::unique_ptr<AbstractGfx> gfx,
   g_Config.VerifyValidity();
   UpdateActiveConfig();
 
+#ifndef WINRT_XBOX
   g_shader_cache->InitializeShaderCache();
+#endif
 
   return true;
 }
