@@ -20,6 +20,8 @@ extern const Info<bool> MAIN_USE_GAME_COVERS;
 extern const Info<bool> MAIN_FOCUSED_HOTKEYS;
 extern const Info<bool> MAIN_RECURSIVE_ISO_PATHS;
 extern const Info<std::string> FRONTEND_SELECTED_THEME;
+extern const Info<int> FRONTEND_LAST_CATEGORY;
+extern const Info<int> FRONTEND_LAST_GAME;
 
 
 }  // namespace Config
