@@ -711,6 +711,17 @@ void CreateGraphicsTab(UIState* state)
 
   int ir_idx = Config::Get(Config::GFX_EFB_SCALE);
 
+ 
+  bool hdrEnhanced = Config::Get(Config::GFX_ENHANCE_HDR_OUTPUT);
+  /*
+  if (ImGui::Checkbox("Alternate HDR", &hdrEnhanced))
+  {
+    Config::SetBaseOrCurrent(Config::GFX_ENHANCE_HDR_OUTPUT, hdrEnhanced);
+    Config::Save();
+  }
+  */
+  
+
   if (ImGui::TreeNode("Internal Resolution"))
   {
     for (int i = 0; i < 9; i++)

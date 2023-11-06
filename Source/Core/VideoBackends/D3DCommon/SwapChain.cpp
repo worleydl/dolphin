@@ -97,6 +97,7 @@ bool SwapChain::CreateSwapChain(bool stereo, bool hdr)
 
     swap_chain_desc.Scaling = DXGI_SCALING_STRETCH;
     swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+
     swap_chain_desc.Stereo = stereo;
     swap_chain_desc.Flags = GetSwapChainFlags();
 
@@ -129,6 +130,12 @@ bool SwapChain::CreateSwapChain(bool stereo, bool hdr)
 
     m_swap_chain = swap_chain1;
   }
+
+  // Setup HDR colorspace
+  Microsoft::WRL::ComPtr<IDXGISwapChain4> swap_chain4;
+  hr = m_swap_chain->QueryInterface(IID_PPV_ARGS(&swap_chain4));
+  swap_chain4->SetColorSpace1(DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020);
+
 
   // Flip-model swapchains aren't supported on Windows 7, so here we fall back to a legacy
   // BitBlt-model swapchain. Note that this won't work for DX12, but systems which don't
@@ -194,9 +201,11 @@ bool SwapChain::CreateSwapChain(bool stereo, bool hdr)
                                                &color_space_support);
       if (SUCCEEDED(hr) && (color_space_support & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT))
       {
+        /*
         hr = swap_chain4->ResizeBuffers(SWAP_CHAIN_BUFFER_COUNT, 0, 0,
                                         GetDXGIFormatForAbstractFormat(m_texture_format_hdr, false),
                                         GetSwapChainFlags());
+                                        */
         if (SUCCEEDED(hr))
         {
           hr = swap_chain4->SetColorSpace1(DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709);

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props')" />
   <Import Project="..\VSProps\Base.Macros.props" />
@@ -58,6 +58,7 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -4832,6 +4833,12 @@
     <None Include="Sys\GC\font_western.bin">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="Sys\Shaders\AutoHDR.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Sys\Shaders\hdr.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="Sys\Profiles\Wiimote\Classic.ini">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -4957,7 +4964,7 @@
     <ProjectReference Include="$(CoreDir)DolphinLib.vcxproj">
       <Project>{D79392F7-06D6-4B4B-A39F-4D587C215D3A}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\source\repos\dolphin\Externals\SDL\SDL\VisualC-WinRT\SDL-UWP.vcxproj">
+    <ProjectReference Include="C:\dev\hdr\dolphin\Externals\SDL\SDL\VisualC-WinRT\SDL-UWP.vcxproj">
       <Project>{89e9b32e-a86a-47c3-a948-d2b1622925ce}</Project>
     </ProjectReference>
   </ItemGroup>

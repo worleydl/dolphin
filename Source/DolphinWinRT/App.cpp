@@ -93,6 +93,23 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 
     Core::DeclareAsHostThread();
 
+    auto hdi = HdmiDisplayInformation::GetForCurrentView();
+    // HDR Setup
+    auto modes = hdi.GetSupportedDisplayModes();
+
+    for (unsigned i = 0; i < modes.Size(); i++)
+    {
+      auto mode = modes.GetAt(i);
+
+      if (mode.ColorSpace() == HdmiDisplayColorSpace::BT2020 && mode.RefreshRate() >= 59)
+      {
+        hdi.RequestSetCurrentDisplayModeAsync(mode, HdmiDisplayHdrOption::Eotf2084);
+        break;
+      }
+    }
+    // End HDR setup
+
+
     while (true)
     {
       // ImGUI frontend
@@ -227,8 +244,9 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
         wsi.render_width = hdi.GetCurrentDisplayMode().ResolutionWidthInRawPixels();
         wsi.render_height = hdi.GetCurrentDisplayMode().ResolutionHeightInRawPixels();
         // Our UI is based on 1080p, and we're adding a modifier to zoom in by 80%
-        wsi.render_surface_scale = ((float) wsi.render_width / 1920.0f) * 1.8f;
-      }
+        wsi.render_surface_scale = ((float)wsi.render_width / 1920.0f) * 1.8f;
+
+       }
     }
 
     std::unique_ptr<BootParameters> boot =
