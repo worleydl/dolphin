@@ -241,6 +241,7 @@ const std::vector<std::unique_ptr<VideoBackendBase>>& VideoBackendBase::GetAvail
 #else
     backends.push_back(std::make_unique<DX12::VideoBackend>());
 #endif
+#endif
 #ifdef HAS_OPENGL
     backends.push_back(std::make_unique<OGL::VideoBackend>());
 #endif
